@@ -33,6 +33,6 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            - ghcr.io/haider-yahiya/ai-core:latest
+            ghcr.io/haider-yahiya/ai-core:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
