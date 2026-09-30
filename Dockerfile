@@ -1,5 +1,5 @@
-# Basis-Image mit CUDA 12.x Devel für die Kompilierung
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04
+# Basis-Image mit CUDA 12.3+ Devel für die Kompilierung aktualisiert
+FROM nvidia/cuda:12.3.2-devel-ubuntu22.04
 
 # Umgebungsvariablen für non-interactive Installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,14 +28,14 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip
 # Arbeitsverzeichnis erstellen
 WORKDIR /app
 
-# llama.cpp klonen (oder Quellcode kopieren)
+# llama.cpp klonen
 RUN git clone https://github.com/ggerganov/llama.cpp.git /app/llama.cpp
 
-# llama.cpp mit CUDA-Architekturen für T4 (75), und L4 (89) kompilieren
+# llama.cpp mit CUDA-Architekturen für T4 (75), A10G (86) und L4 (89) kompilieren (mit -j2 gegen OOM)
 WORKDIR /app/llama.cpp/build
 RUN cmake .. \
     -DGGML_CUDA=ON \
-    -DCMAKE_CUDA_ARCHITECTURES="75;89" \
+    -DCMAKE_CUDA_ARCHITECTURES="75;86;89" \
     -DCMAKE_BUILD_TYPE=Release \
     && cmake --build . --config Release -j2
 
