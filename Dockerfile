@@ -31,13 +31,13 @@ WORKDIR /app
 # llama.cpp klonen (oder Quellcode kopieren)
 RUN git clone https://github.com/ggerganov/llama.cpp.git /app/llama.cpp
 
-# llama.cpp mit CUDA-Architekturen 75;86;89;90 kompilieren
+# llama.cpp mit CUDA-Architekturen für T4 (75), und L4 (89) kompilieren
 WORKDIR /app/llama.cpp/build
 RUN cmake .. \
     -DGGML_CUDA=ON \
     -DCMAKE_CUDA_ARCHITECTURES="75;89" \
     -DCMAKE_BUILD_TYPE=Release \
-    && cmake --build . --config Release -j$(nproc)
+    && cmake --build . --config Release -j2
 
 RUN cp /app/llama.cpp/build/bin/llama-server /usr/local/bin/llama-server
 
