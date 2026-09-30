@@ -35,7 +35,7 @@ RUN git clone https://github.com/ggerganov/llama.cpp.git /app/llama.cpp
 WORKDIR /app/llama.cpp/build
 RUN cmake .. \
     -DGGML_CUDA=ON \
-    -DCMAKE_CUDA_ARCHITECTURES="75;80;86;89;90" \
+    -DCMAKE_CUDA_ARCHITECTURES="75;89" \
     -DCMAKE_BUILD_TYPE=Release \
     && cmake --build . --config Release -j$(nproc)
 

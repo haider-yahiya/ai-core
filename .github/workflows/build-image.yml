@@ -26,6 +26,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHT }}
 
+      - name: Set up Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 10
+
       - name: Docker-Image bauen und pushen
         uses: docker/build-push-action@v5
         with:
