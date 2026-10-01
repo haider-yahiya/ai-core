@@ -20,7 +20,8 @@ ENV CC=gcc-${GCC_VERSION} CXX=g++-${GCC_VERSION} CUDAHOSTCXX=g++-${GCC_VERSION}
 
 WORKDIR /app
 
-COPY . .
+# Klont llama.cpp direkt in /app, damit CMakeLists.txt garantiert da ist
+RUN git clone --depth 1 https://github.com/ggml-org/llama.cpp.git .
 
 RUN if [ "${CUDA_DOCKER_ARCH}" != "default" ]; then \
     export CMAKE_ARGS="-DCMAKE_CUDA_ARCHITECTURES=${CUDA_DOCKER_ARCH}"; \
