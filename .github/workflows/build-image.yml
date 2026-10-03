@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
@@ -32,13 +33,24 @@ jobs:
         with:
           swap-size-gb: 10
 
-      - name: Docker-Image bauen und pushen
-        uses: docker/build-push-action@v5
+      - name: Der kaggel wird gebaut
+        if: github.ref_name == 'kaggel'
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: kaggel.Dockerfile
           push: true
-          tags: |
-            ghcr.io/haider-yahiya/ai-core:latest
+          tags: ghcr.io/haider-yahiya/ai-kaggel-core:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Der main wird gebaut
+        if: github.ref_name == 'main'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: main.Dockerfile
+          push: true
+          tags: ghcr.io/haider-yahiya/ai-main-core:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
