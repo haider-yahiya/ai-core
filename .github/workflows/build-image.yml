@@ -40,7 +40,7 @@ jobs:
           context: .
           file: kaggel.Dockerfile
           push: true
-          tags: ghcr.io/haider-yahiya/ai-kaggel-core:latest
+          tags: ghcr.io/haider-yahiya/kaggel-ai-core:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -51,6 +51,6 @@ jobs:
           context: .
           file: main.Dockerfile
           push: true
-          tags: ghcr.io/haider-yahiya/ai-main-core:latest
+          tags: ghcr.io/haider-yahiya/main-ai-core:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
