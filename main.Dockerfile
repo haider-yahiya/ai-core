@@ -79,7 +79,12 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     python3-full \
     python3-pkg-resources \
+    python-is-python3 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN python --version && \
+    python3 --version && \
+    pip --version
 
 ENV LLAMA_ARG_HOST=0.0.0.0
 
