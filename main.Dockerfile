@@ -20,7 +20,7 @@ ENV CC=gcc-${GCC_VERSION} CXX=g++-${GCC_VERSION} CUDAHOSTCXX=g++-${GCC_VERSION}
 
 WORKDIR /app
 
-# Klont llama.cpp direkt in /app, damit CMakeLists.txt garantiert da ist
+# Klont llama.cpp direkt in /app
 RUN git clone --depth 1 https://github.com/ggml-org/llama.cpp.git .
 
 RUN if [ "${CUDA_DOCKER_ARCH}" != "default" ]; then \
@@ -67,40 +67,16 @@ RUN apt-get update \
 
 COPY --from=build /app/lib/ /app
 
-### Full
-FROM base AS full
-
-COPY --from=build /app/full /app
-
-WORKDIR /app
-
-RUN apt-get update \
-    && apt-get install -y \
-    git \
-    python3 \
-    python3-pip \
-    python3-wheel \
-    && pip install --break-system-packages --upgrade setuptools \
-    && pip install --break-system-packages -r requirements.txt \
-    && apt autoremove -y \
-    && apt clean -y \
-    && rm -rf /tmp/* /var/tmp/* \
-    && find /var/cache/apt/archives /var/lib/apt/lists -not -name lock -type f -delete \
-    && find /var/cache -type f -delete
-
-ENTRYPOINT ["/app/tools.sh"]
-
-### Light, CLI only
-FROM base AS light
-
-COPY --from=build /app/full/llama /app/full/llama-cli /app/full/llama-completion /app
-
-WORKDIR /app
-
-ENTRYPOINT [ "/app/llama-cli" ]
-
 ### Server, Server only
 FROM base AS server
+
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    python3-wheel \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV LLAMA_ARG_HOST=0.0.0.0
 
